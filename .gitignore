@@ -1,0 +1,5 @@
+.env
+config/odoo.conf
+data/
+db/
+*.log

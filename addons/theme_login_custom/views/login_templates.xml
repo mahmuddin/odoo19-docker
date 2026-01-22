@@ -1,11 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="login_custom" inherit_id="web.login">
-        <xpath expr="//form" position="before">
-            <div class="text-center mt-4 mb-2">
-                <h2 class="welcome-message">Selamat Datang</h2>
-                <p class="welcome-subtitle">Silahkan masuk untuk melanjutkan</p>
-            </div>
-        </xpath>
-    </template>
+    <record id="login_custom" model="ir.ui.view">
+        <field name="name">login.custom.view</field>
+        <field name="inherit_id" ref="web.login"/>
+        <field name="type">qweb</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="before">
+                <div class="text-center mt-4 mb-2">
+                    <h2 class="welcome-message">Selamat Datang</h2>
+                    <p class="welcome-subtitle">Silahkan masuk untuk melanjutkan</p>
+                </div>
+            </xpath>
+        </field>
+    </record>
 </odoo>

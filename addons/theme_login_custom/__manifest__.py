@@ -1,5 +1,5 @@
 {
-    'name': 'Custom Login Theme',
+    'name': 'Custom Login Theme (theme_login_custom)',
     'version': '1.0',
     'summary': 'Custom background and welcome message for login page',
     'description': """
@@ -10,6 +10,7 @@
     'category': 'Theme/Hidden',
     'author': 'Your Name',
     'depends': ['web'],
+    'application': True,
     'data': [
         'views/login_templates.xml',
     ],

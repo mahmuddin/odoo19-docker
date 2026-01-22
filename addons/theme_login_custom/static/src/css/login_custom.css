@@ -4,18 +4,18 @@ body {
     background-size: cover;
     background-attachment: fixed;
 }
-
-/* Style the welcome message */
 .welcome-message {
     font-weight: bold;
-    color: #ffffff;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    color: #333; /* Darker text for inside card */
+    margin-bottom: 5px;
+}
+.welcome-subtitle {
+    font-size: 1.1em;
+    color: #666;
     margin-bottom: 20px;
 }
-
-/* Enhancing the login card */
+/* Ensure login card styling */
 .card {
     border: none !important;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    background-color: rgba(255, 255, 255, 0.95) !important;
 }

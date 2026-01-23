@@ -26,14 +26,14 @@ class ProjectTask(models.Model):
     def create(self, vals_list):
         """Ensure date_deadline is synced on create"""
         for vals in vals_list:
-            if 'planned_date_end' in vals and not vals.get('date_deadline'):
+            if vals.get('planned_date_end') and not vals.get('date_deadline'):
                 deadline = fields.Datetime.to_datetime(vals['planned_date_end']).date()
                 vals['date_deadline'] = deadline
         return super(ProjectTask, self).create(vals_list)
 
     def write(self, vals):
         """Sync date_deadline on write if planned_date_end changes"""
-        if 'planned_date_end' in vals and not vals.get('date_deadline'):
+        if vals.get('planned_date_end') and not vals.get('date_deadline'):
             deadline = fields.Datetime.to_datetime(vals['planned_date_end']).date()
             vals['date_deadline'] = deadline
         return super(ProjectTask, self).write(vals)

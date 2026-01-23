@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit and Override Base Calendar View to show durations (Timeline feel) -->
+    <record id="view_task_calendar_timeline_inherit" model="ir.ui.view">
+        <field name="name">project.task.calendar.timeline.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_calendar"/>
+        <field name="arch" type="xml">
+            <xpath expr="//calendar" position="attributes">
+                <attribute name="date_start">date_start</attribute>
+                <attribute name="date_stop">date_end</attribute>
+                <attribute name="date_delay">allocated_hours</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="attributes">
+                <attribute name="filters">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add Graph View for Timeline Visualization -->
+    <record id="view_task_graph_timeline" model="ir.ui.view">
+        <field name="name">project.task.graph.timeline</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <graph string="Task Timeline Analysis" type="bar" stacked="True">
+                <field name="project_id" type="row"/>
+                <field name="stage_id" type="col"/>
+                <field name="allocated_hours" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Extend Project Task Form View to show date fields properly and hide deadline -->
+    <record id="view_task_form_inherit_timeline" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.timeline</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <!-- Hide Default Deadline Label -->
+            <xpath expr="//label[@for='date_deadline']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Hide Deadline Field Container -->
+            <xpath expr="//div[@id='date_deadline_and_recurring_task']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Add Start and End date in dedicated rows -->
+            <xpath expr="//div[@id='date_deadline_and_recurring_task']" position="after">
+                <field name="date_start" widget="datetime"/>
+                <field name="date_end" widget="datetime"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Base Task List View to sync Deadline column with End Date -->
+    <record id="project_task_view_tree_main_base_inherit" model="ir.ui.view">
+        <field name="name">project.task.view.tree.main.base.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.project_task_view_tree_main_base"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="after">
+                <field name="date_end" string="Deadline" widget="remaining_days" optional="show" invisible="state in ['1_done', '1_canceled']"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Base Task Kanban View to sync date display with End Date -->
+    <record id="view_task_kanban_inherit_timeline" model="ir.ui.view">
+        <field name="name">project.task.kanban.inherit.timeline</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="after">
+                <field t-if="record.date_end.raw_value" invisible="state in ['1_done', '1_canceled']" name="date_end" widget="remaining_days"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

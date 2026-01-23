@@ -7,12 +7,15 @@
         <field name="inherit_id" ref="project.view_task_calendar"/>
         <field name="arch" type="xml">
             <xpath expr="//calendar" position="attributes">
-                <attribute name="date_start">date_start</attribute>
-                <attribute name="date_stop">date_end</attribute>
+                <attribute name="date_start">planned_date_start</attribute>
+                <attribute name="date_stop">planned_date_end</attribute>
                 <attribute name="date_delay">allocated_hours</attribute>
+                <attribute name="color">project_id</attribute>
             </xpath>
-            <xpath expr="//field[@name='user_ids']" position="attributes">
-                <attribute name="filters">1</attribute>
+            <xpath expr="//calendar" position="inside">
+                <field name="stage_id" filters="1"/>
+                <field name="project_id" filters="1"/>
+                <field name="user_ids" filters="1"/>
             </xpath>
         </field>
     </record>
@@ -35,6 +38,7 @@
         <field name="name">project.task.form.inherit.timeline</field>
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="priority">20</field>
         <field name="arch" type="xml">
             <!-- Hide Default Deadline Label -->
             <xpath expr="//label[@for='date_deadline']" position="attributes">
@@ -46,8 +50,17 @@
             </xpath>
             <!-- Add Start and End date in dedicated rows -->
             <xpath expr="//div[@id='date_deadline_and_recurring_task']" position="after">
-                <field name="date_start" widget="datetime"/>
-                <field name="date_end" widget="datetime"/>
+                <field name="planned_date_start" widget="datetime"/>
+                <field name="planned_date_end" widget="datetime"/>
+            </xpath>
+            <!-- Modify Sub-tasks list view columns -->
+            <xpath expr="//field[@name='child_ids']//*[@name='date_deadline']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']//*[@name='date_deadline']" position="after">
+                <field name="planned_date_start" widget="datetime" optional="show"/>
+                <field name="planned_date_end" widget="datetime" optional="show"/>
             </xpath>
         </field>
     </record>
@@ -62,7 +75,7 @@
                 <attribute name="column_invisible">1</attribute>
             </xpath>
             <xpath expr="//field[@name='date_deadline']" position="after">
-                <field name="date_end" string="Deadline" widget="remaining_days" optional="show" invisible="state in ['1_done', '1_canceled']"/>
+                <field name="planned_date_end" string="End Date" widget="remaining_days" optional="show" invisible="state in ['1_done', '1_canceled']"/>
             </xpath>
         </field>
     </record>
@@ -77,7 +90,7 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//field[@name='date_deadline']" position="after">
-                <field t-if="record.date_end.raw_value" invisible="state in ['1_done', '1_canceled']" name="date_end" widget="remaining_days"/>
+                <field t-if="record.planned_date_end.raw_value" invisible="state in ['1_done', '1_canceled']" name="planned_date_end" widget="remaining_days"/>
             </xpath>
         </field>
     </record>
